@@ -1,0 +1,53 @@
+material {
+    name : Lit,
+    requires : [
+        uv0
+    ],
+    shadingModel : lit,
+    parameters : [
+        {
+            type : sampler2d,
+            name : diffuse
+        },
+        {
+            type : sampler2d,
+            name : specular
+        },
+        {
+            type : sampler2d,
+            name : normal
+        },
+        {
+            type : float,
+            name : clearCoat
+        },
+        {
+            type : float,
+            name : clearCoatRoughness
+        },
+        {
+            type : float,
+            name : metallic
+        },
+        {
+            type : float,
+            name : reflectance
+        }
+    ],
+}
+
+fragment {
+    void material(inout MaterialInputs material) {
+        material.normal = texture(materialParams_normal, getUV0()).xyz * 2.0 - 1.0;
+        prepareMaterial(material);
+        material.baseColor = texture(materialParams_diffuse, getUV0());
+
+        vec3 specular = texture(materialParams_specular, getUV0()).rgb;
+        material.roughness = 1.0 - length(specular);
+
+        material.metallic = materialParams.metallic;
+        material.reflectance = materialParams.reflectance;
+        material.clearCoat = materialParams.clearCoat;
+        material.clearCoatRoughness = materialParams.clearCoatRoughness;
+    }
+}
