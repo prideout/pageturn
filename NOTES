@@ -1,7 +1,6 @@
-ThreeJS => glMatrix notes
-
-    rotateAxis => transformDirection =>
-         vec3.transformQuat / vec3.transformMat4 / vec3.transformMat3
-    rotateByAxis => mat4.fromRotation
-    compose    => mat4.fromRotationTranslation
-    decompose  => mat4.getRotation, mat4.getTranslation
+Move Grid to its own file
+Add normal / tangent computation
+Add a slider that simply rotates the page using TranformManager
+Add deformation
+Add a photo
+Add a bump map

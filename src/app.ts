@@ -61,9 +61,6 @@ class App {
         // Update the vehicle orientation and position.
         this.simulation.tick(dt);
 
-        // Update the camera position.
-        this.chasecam.tick(dt);
-
         // Render the 3D scene.
         this.display.render();
         this.audio.render();
