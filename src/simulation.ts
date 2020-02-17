@@ -18,7 +18,7 @@ import Vehicle from "./vehicle";
 import { mat4, quat, vec3 } from "gl-matrix";
 
 export default class Simulation {
-    private readonly collision: Sampler;
+     private readonly collision: Sampler;
     private readonly elevation: Sampler;
     private readonly gfxvehicle: Vehicle;
     private readonly keyState: KeyState;

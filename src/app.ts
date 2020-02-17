@@ -22,8 +22,7 @@ const initialAssets = [
     urls.sky,
     urls.ibl,
     urls.pbrMaterial,
-    urls.nonlitMaterial,
-    urls.texMaterial,
+    urls.nonlitMaterial
 ];
 
 Filament.init(initialAssets, () => {
