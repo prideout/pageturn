@@ -1,0 +1,12 @@
+Before building the web app, clone the master and gh-pages branches separately as follows.
+
+    git clone https://github.com/prideout/pageturn.git pageturn_source
+    git clone -b gh-pages https://github.com/prideout/pageturn.git pageturn_public
+    cd pageturn_source
+    yarn install
+    yarn build
+    cd ../pageturn_public
+    npx http-server
+
+The master branch contains only the source code, while gh-pages contains resource files and the
+output of the build.
