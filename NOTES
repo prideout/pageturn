@@ -1,6 +1,0 @@
-Move Grid to its own file
-Add normal / tangent computation
-Add a slider that simply rotates the page using TranformManager
-Add deformation
-Add a photo
-Add a bump map

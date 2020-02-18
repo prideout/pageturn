@@ -10,6 +10,7 @@
 
 import * as Filament from "filament";
 import * as urls from "./urls";
+import PageDeformer from "./pageDeformer";
 import PageMesh from "./pageMesh";
 import { mat4 } from "gl-matrix";
 
@@ -26,6 +27,8 @@ export default class Display {
     private readonly swapChain: Filament.SwapChain;
     private readonly view: Filament.View;
     private readonly pageMesh: PageMesh = new PageMesh(20, 20);
+    private readonly pageDeformer: PageDeformer =
+            new PageDeformer(this.pageMesh.positions, this.pageMesh.texcoords)
 
     constructor(readonly canvas: HTMLCanvasElement) {
         this.engine = Filament.Engine.create(canvas);
@@ -73,15 +76,28 @@ export default class Display {
         this.resize();
     }
 
+    // Take a page-flip value between 0 and 1, applies rotation and deformation, then renders.
     public render(animationValue: number) {
-
-        const radians = Math.PI * animationValue;
+        const radians = Math.PI * Math.max(0.0, (animationValue - 0.125) / 0.875);
+        let deformation = 0.2 + (1.0 + Math.cos(8.0 * Math.PI * animationValue)) * 0.8 / 2.0;
+        if (animationValue > 0.125 && animationValue < 0.75) {
+            deformation = 0.2;
+        }
+        if (animationValue > 0.5) {
+            deformation = 0.2 + (1.0 + Math.cos(2.0 * Math.PI * animationValue)) * 0.8 / 2.0;
+        }
+        // Apply rotation using the transform manager.
         const transform = mat4.fromRotation(mat4.create(), radians, [0, -1, 0]);
         const tcm = this.engine.getTransformManager();
         const inst = tcm.getInstance(this.pageMesh.renderable);
         tcm.setTransform(inst, transform);
         inst.delete();
 
+        // Apply deformation and update the VBO.
+        this.pageDeformer.updatePositions(deformation);
+        this.pageMesh.update(this.engine);
+
+        // Render the 3D scene.
         this.renderer.render(this.swapChain, this.view);
     }
 

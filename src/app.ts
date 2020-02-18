@@ -1,8 +1,5 @@
 // -------------------------------------------------------------------------------------------------
-// The App owns the Display and Simulation.
-//
-// HexGL by Thibaut 'BKcore' Despoulain <http://bkcore.com>
-// Rewritten by Philip Rideout <https://prideout.net>
+// Author: Philip Rideout <https://prideout.net>
 // -------------------------------------------------------------------------------------------------
 
 import * as Filament from "filament";
@@ -39,6 +36,9 @@ class App {
         this.display = new Display(canvas);
         this.time = Date.now();
         this.slider = document.getElementById("animvalue") as HTMLInputElement;
+        this.slider.addEventListener("input", () => {
+            console.info(this.slider.value);
+        });
         window.requestAnimationFrame(this.tick);
     }
 

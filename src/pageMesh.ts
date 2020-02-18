@@ -3,7 +3,7 @@
 //
 //   - constructor(numColumns: number, numRows: number)
 //   - init(engine: Filament.Engine, material: Filament.Material)
-//   - update(engine: Filament.Engine) {
+//   - update(engine: Filament.Engine)
 //
 // Author: Philip Rideout <https://prideout.net>
 // -------------------------------------------------------------------------------------------------
@@ -12,13 +12,9 @@ import * as Filament from "filament";
 import { vec3 } from "gl-matrix";
 
 export default class PageMesh {
-    get renderable() { return this.entity; }
-
     private readonly numCells = this.numColumns * this.numRows;
     private readonly numIndices = this.numCells * 6;
     private readonly numVertices = (this.numColumns + 1) * (this.numRows + 1);
-    private readonly positions = new Float32Array(this.numVertices * 3);
-    private readonly texcoords = new Float32Array(this.numVertices * 2);
     private readonly faceNormals = new Float32Array(this.numCells * 2 * 3);
     private readonly smoothNormals = new Float32Array(this.numVertices * 3);
     private readonly valences = new Uint8Array(this.numVertices);
@@ -27,6 +23,10 @@ export default class PageMesh {
     private vertexBuffer: Filament.VertexBuffer;
     private indexBuffer: Filament.IndexBuffer;
     private entity: Filament.Entity;
+
+    readonly positions = new Float32Array(this.numVertices * 3);
+    readonly texcoords = new Float32Array(this.numVertices * 2);
+    get renderable() { return this.entity; }
 
     constructor(readonly numColumns: number, readonly numRows: number) {
         console.info(`Created page mesh with ${this.numVertices} verts.`)
