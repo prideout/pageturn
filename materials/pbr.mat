@@ -14,10 +14,6 @@ material {
         {
             type : float,
             name : roughness
-        },
-        {
-            type : float,
-            name : reflectance
         }
     ],
 }
@@ -28,6 +24,5 @@ fragment {
         material.baseColor = materialParams.baseColor;
         material.roughness = materialParams.roughness;
         material.metallic = materialParams.metallic;
-        material.reflectance = materialParams.reflectance;
     }
 }
