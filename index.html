@@ -47,7 +47,12 @@
         }
 
         input.slider {
+            width: 50%;
+        }
+
+        div.slider {
             width: 100%;
+            text-align: center;
         }
 
         img {
@@ -188,7 +193,9 @@
     <p>17 Feb 2020</p>
     <p>This uses Filament to demonstrate <i>Deforming Pages of 3D Electronic Books</i> by Hong et al.</p>
     <canvas></canvas>
+    <div class="slider">
     <input id="animvalue" class="slider" type="range" min="0" max="1" step="0.001" value="0"/>
+    </div>
     <p>
         Their paper suggests animating a page by independently deforming and rotating the mesh.
         They describe the deformation using simple parametric equations that take two
