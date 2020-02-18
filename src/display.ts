@@ -78,15 +78,8 @@ export default class Display {
 
     // Take a page-flip value between 0 and 1, applies rotation and deformation, then renders.
     public render(animationValue: number) {
-        const radians = Math.PI * Math.max(0.0, (animationValue - 0.125) / 0.875);
-        let deformation = 0.2 + (1.0 + Math.cos(8.0 * Math.PI * animationValue)) * 0.8 / 2.0;
-        if (animationValue > 0.125 && animationValue < 0.75) {
-            deformation = 0.2;
-        }
-        if (animationValue > 0.5) {
-            deformation = 0.2 + (1.0 + Math.cos(2.0 * Math.PI * animationValue)) * 0.8 / 2.0;
-        }
         // Apply rotation using the transform manager.
+        const radians = Math.PI * Math.max(0.0, (animationValue - 0.125) / 0.875);
         const transform = mat4.fromRotation(mat4.create(), radians, [0, -1, 0]);
         const tcm = this.engine.getTransformManager();
         const inst = tcm.getInstance(this.pageMesh.renderable);
@@ -94,6 +87,16 @@ export default class Display {
         inst.delete();
 
         // Apply deformation and update the VBO.
+        const D0 = 0.15, D1 = 1.0 - D0;
+        let deformation = 0;
+        deformation = D0 + (1.0 + Math.cos(8.0 * Math.PI * animationValue)) * D1 / 2.0;
+        if (animationValue > 0.125) {
+            deformation = D0;
+        }
+        if (animationValue > 0.5) {
+            const t = (animationValue - 0.5) / 0.5;
+            deformation = D0 + D1 * Math.pow(t, 4.0);
+        }
         this.pageDeformer.updatePositions(deformation);
         this.pageMesh.update(this.engine);
 
