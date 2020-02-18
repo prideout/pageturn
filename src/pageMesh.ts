@@ -111,6 +111,9 @@ export default class PageMesh {
             .material(0, matinstance)
             .geometry(0, PrimitiveType.TRIANGLES, this.vertexBuffer, this.indexBuffer)
             .build(engine, this.entity);
+
+        const tcm = engine.getTransformManager();
+        tcm.create(this.entity);
     }
 
     private generateFaceNormals() {

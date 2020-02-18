@@ -10,8 +10,8 @@
 
 import * as Filament from "filament";
 import * as urls from "./urls";
-import Vehicle from "./vehicle";
 import PageMesh from "./pageMesh";
+import { mat4 } from "gl-matrix";
 
 export default class Display {
     public readonly camera: Filament.Camera;
@@ -27,7 +27,7 @@ export default class Display {
     private readonly view: Filament.View;
     private readonly pageMesh: PageMesh = new PageMesh(20, 20);
 
-    constructor(readonly canvas: HTMLCanvasElement, vehicle: Vehicle, onFinishedLoading: () => void) {
+    constructor(readonly canvas: HTMLCanvasElement) {
         this.engine = Filament.Engine.create(canvas);
         this.swapChain = this.engine.createSwapChain();
         this.renderer = this.engine.createRenderer();
@@ -37,7 +37,7 @@ export default class Display {
         this.view.setCamera(this.camera);
         this.view.setScene(this.scene);
 
-        const eye = [0, 0, 2], center = [0, 0, 0], up = [0, 1, 0];
+        const eye = [0, 0, 3], center = [0, 0, 0], up = [0, 1, 0];
         this.camera.lookAt(eye, center, up);
 
         // Create the skybox.
@@ -73,7 +73,15 @@ export default class Display {
         this.resize();
     }
 
-    public render() {
+    public render(animationValue: number) {
+
+        const radians = Math.PI * animationValue;
+        const transform = mat4.fromRotation(mat4.create(), radians, [0, -1, 0]);
+        const tcm = this.engine.getTransformManager();
+        const inst = tcm.getInstance(this.pageMesh.renderable);
+        tcm.setTransform(inst, transform);
+        inst.delete();
+
         this.renderer.render(this.swapChain, this.view);
     }
 
@@ -86,6 +94,6 @@ export default class Display {
         const aspect = width / height;
         const Fov = Filament.Camera$Fov;
         const fov = aspect < 1 ? Fov.HORIZONTAL : Fov.VERTICAL;
-        this.camera.setProjectionFov(45, aspect, 1.0, 20000.0, fov);
+        this.camera.setProjectionFov(40, aspect, 1.0, 20000.0, fov);
     }
 }
