@@ -1,25 +1,29 @@
-// -------------------------------------------------------------------------------------------------
-// The PageDeformer holds weak references to a list of UV's and positions.
-//
-//   - constructor(positions: Float32Array, texcoords: Float32Array)
-//   - updatePositions(t: number)
-//   - updatePositions(theta: number, apex: number)
-//
-// Author: Philip Rideout <https://prideout.net>
-// -------------------------------------------------------------------------------------------------
-
-import { vec2, vec3 } from "gl-matrix";
-
 export default class PageDeformer {
     constructor(readonly positions: Float32Array, readonly texcoords: Float32Array) {}
 
-    updatePositions(t: number) {
-        const apex = -15 * t;
-        const theta = t * Math.PI / 2.0;
-        this.deform(theta, apex);
+    // Takes an animation value in [0,1] and updates the positions array by applying
+    // the deformation described in "Deforming Pages of Electronic Books" by Hong et al.
+    // Returns a rotation value that should be applied to the entire mesh.
+    updatePositions(t: number): number {
+        const D0 = 0.15, D1 = 1.0 - D0;
+        let deformation = 0;
+        deformation = D0 + (1.0 + Math.cos(8.0 * Math.PI * t)) * D1 / 2.0;
+        if (t > 0.125) {
+            deformation = D0;
+        }
+        if (t > 0.5) {
+            const t1 = (t - 0.5) / 0.5;
+            deformation = D0 + D1 * Math.pow(t1, 4.0);
+        }
+        const apex = -15 * deformation;
+        const theta = deformation * Math.PI / 2.0;
+        this.deformMesh(theta, apex);
+
+        const radians = Math.PI * Math.max(0.0, (t - 0.125) / 0.875);
+        return radians;
     }
 
-    private deform(theta: number, apex: number) {
+    private deformMesh(theta: number, apex: number) {
         const count = this.positions.length / 3;
         for (let i = 0; i < count; i++) {
             const u = this.texcoords[i*2+0];
