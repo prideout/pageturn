@@ -1,10 +1,9 @@
 export default class PageDeformer {
     constructor(readonly positions: Float32Array, readonly texcoords: Float32Array) {}
 
-    // Takes an animation value in [0,1] and updates the positions array by applying
-    // the deformation described in "Deforming Pages of Electronic Books" by Hong et al.
-    // Returns a rotation value that should be applied to the entire mesh.
-    updatePositions(t: number): number {
+    // Takes an animation value in [0,1] and updates the positions array.
+    // Returns a rotation value that should be applied to the entire page.
+    public updatePositions(t: number): number {
         const D0 = 0.15, D1 = 1.0 - D0;
         let deformation = 0;
         deformation = D0 + (1.0 + Math.cos(8.0 * Math.PI * t)) * D1 / 2.0;
@@ -12,8 +11,8 @@ export default class PageDeformer {
             deformation = D0;
         }
         if (t > 0.5) {
-            const t1 = (t - 0.5) / 0.5;
-            deformation = D0 + D1 * Math.pow(t1, 4.0);
+            const t1 = Math.max(0.0, (t - 0.5) / 0.5 - 0.125);
+            deformation = D0 + D1 * Math.pow(t1, 3.0);
         }
         const apex = -15 * deformation;
         const theta = deformation * Math.PI / 2.0;
@@ -23,6 +22,7 @@ export default class PageDeformer {
         return radians;
     }
 
+    // Applies the deformation described in "Deforming Pages of Electronic Books" by Hong et al.
     private deformMesh(theta: number, apex: number) {
         const count = this.positions.length / 3;
         for (let i = 0; i < count; i++) {
