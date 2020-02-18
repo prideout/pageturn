@@ -65,8 +65,8 @@ export default class Display {
         Filament.LightManager.Builder(Filament.LightManager$Type.SUN)
             .color([0.98, 0.92, 0.89])
             .castShadows(true)
-            .intensity(1100.0)
-            .direction([0.5, -1, 0])
+            .intensity(5000.0)
+            .direction([-0.5, 0.5, 0])
             .build(this.engine, sunlight);
         this.scene.addEntity(sunlight);
 

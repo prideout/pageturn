@@ -105,6 +105,8 @@ export default class PageMesh {
 
         const matinstance = material.createInstance();
         matinstance.setFloat4Parameter("baseColor", [1, 1, 1, 1]);
+        matinstance.setFloatParameter("roughness", 0.0);
+        matinstance.setFloatParameter("metallic", 0.0);
 
         Filament.RenderableManager.Builder(1)
             .boundingBox({ center: [0.5, 0.0, 0.0], halfExtent: [0.5, 0.5, 0.5] })
